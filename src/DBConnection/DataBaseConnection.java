@@ -21,7 +21,7 @@ public class DataBaseConnection {
     }
     public static void createTable(String tableName, HashMap<String,String> columns, HashMap<String,String> constraints) throws SQLException
     {
-        String request="drop table "+tableName+";create table "+ tableName+"(";
+        String request="create table "+ tableName+"(";
        // Iterator<String> it=columns.keySet().iterator();
         for(Map.Entry<String,String> column : columns.entrySet())
         {
@@ -31,9 +31,9 @@ public class DataBaseConnection {
         for(Map.Entry<String,String> constraint : constraints.entrySet())
         {
             if(constraint.getKey().equalsIgnoreCase("check")||constraint.getKey().equalsIgnoreCase("primary key")||constraint.getKey().equalsIgnoreCase("unique"))
-                request+= "constraint cst_"+constraintNumber++ +" " +constraint.getKey()+" ("+constraint.getValue()+"),";
+                request+= "constraint cst_"+tableName +"_"+ constraint.getValue().split(",")[0]+" " +constraint.getKey()+" ("+constraint.getValue()+"),";
             else //case foreignkey
-                request+="constraint cst_"+constraintNumber++  +" foreign key "+ constraint.getKey()+ " references "+ constraint.getValue()+",";
+                request+="constraint cst_"+tableName +"_"+ constraint.getValue().split("\\(")[0]  +" foreign key ("+ constraint.getKey()+ ") references "+ constraint.getValue()+",";
         }
 
         request=request.substring(0, request.length()-1);
@@ -42,5 +42,6 @@ public class DataBaseConnection {
        Connection con= getConnection();
        PreparedStatement st=con.prepareStatement(request);
        st.executeUpdate();
+        System.out.println("Table "+tableName+" has been successfully created.");
     }
 }
