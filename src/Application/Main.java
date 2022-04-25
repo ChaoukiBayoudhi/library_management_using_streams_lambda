@@ -53,7 +53,7 @@ public class Main {
             constraints.put("memberId","Member(id)");
 
             DataBaseConnection.createTable("Borrowing", columns, constraints);
-
+            DataBaseConnection.closeConnection();
         }catch(Exception e){e.printStackTrace();}
     }
 }
