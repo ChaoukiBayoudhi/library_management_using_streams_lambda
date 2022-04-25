@@ -1,8 +1,6 @@
 package DBConnection;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +21,7 @@ public class DataBaseConnection {
     }
     public static void createTable(String tableName, HashMap<String,String> columns, HashMap<String,String> constraints) throws SQLException
     {
-        String request="create table "+ tableName+"(";
+        String request="drop table "+tableName+";create table "+ tableName+"(";
        // Iterator<String> it=columns.keySet().iterator();
         for(Map.Entry<String,String> column : columns.entrySet())
         {
@@ -32,12 +30,17 @@ public class DataBaseConnection {
         }
         for(Map.Entry<String,String> constraint : constraints.entrySet())
         {
-            if(constraint.getKey().equalsIgnoreCase("check")||constraint.getKey().equalsIgnoreCase("primery key")||constraint.getKey().equalsIgnoreCase("unique"))
-                request+= "constraint cst_"+constraintNumber++ +constraint.getKey()+" "+constraint.getValue()+",";
+            if(constraint.getKey().equalsIgnoreCase("check")||constraint.getKey().equalsIgnoreCase("primary key")||constraint.getKey().equalsIgnoreCase("unique"))
+                request+= "constraint cst_"+constraintNumber++ +" " +constraint.getKey()+" ("+constraint.getValue()+"),";
             else //case foreignkey
-                request+="constraint cst_"+constraintNumber++ +" foreign key "+ constraint.getKey()+ " references "+ constraint.getValue()+",";
+                request+="constraint cst_"+constraintNumber++  +" foreign key "+ constraint.getKey()+ " references "+ constraint.getValue()+",";
         }
-        request+=");";
 
+        request=request.substring(0, request.length()-1);
+        request+=");";
+        System.out.println("the request is :\n"+request);
+       Connection con= getConnection();
+       PreparedStatement st=con.prepareStatement(request);
+       st.executeUpdate();
     }
 }
