@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Book {
     @EqualsAndHashCode.Include
-    private String isbnCode;
+    private int isbnCode;
     private String title;
     private BigDecimal price;
     private int stock;

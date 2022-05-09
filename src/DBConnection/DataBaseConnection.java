@@ -1,13 +1,17 @@
 package DBConnection;
 
+import BookManagement.AuthorBook;
+import BookManagement.Book;
+import BorrowingPackage.Borrowing;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
+
 
 public class DataBaseConnection {
     private static final String url="jdbc:postgresql://localhost:5432/libdb";
@@ -90,5 +94,119 @@ public class DataBaseConnection {
        }
        catch (Exception e) {e.printStackTrace();}
 
+
    }
+   public static ResultSet ExecuteSelect(String request)
+   {
+       ResultSet rs=null;
+       try {
+           con=getConnection();
+           PreparedStatement st=con.prepareStatement(request);
+           rs=st.executeQuery();
+           st.close();
+           closeConnection();
+       }catch(SQLException e)
+       {
+           e.printStackTrace();
+       }
+       return rs;
+   }
+   public static List<Book> getAllBooks()
+   {
+       ResultSet rs=null;
+       List<Book> books=new ArrayList<>();
+       try {
+           String request="select * from book";
+           con=getConnection();
+           PreparedStatement st=con.prepareStatement(request);
+           rs=st.executeQuery();
+            while(rs.next())
+            {
+                Book b1=new Book();
+                b1.setIsbnCode(rs.getInt("id"));
+                b1.setTitle(rs.getString("title"));
+                b1.setReleaseDate(rs.getObject("releasedate", LocalDate.class));
+
+                b1.setPrice(rs.getBigDecimal("price"));
+                b1.setStock(rs.getInt("stock"));
+                books.add(b1);
+            }
+           st.close();
+
+           closeConnection();
+       }catch(SQLException e)
+       {
+           e.printStackTrace();
+       }
+       return books;
+   }
+   public static void executeInsertOrUpdateOrDelete(String request)
+   {
+       try {
+           con=getConnection();
+           PreparedStatement st=con.prepareStatement(request);
+           st.executeUpdate();
+           st.close();
+           closeConnection();
+       }catch(SQLException e)
+       {
+           e.printStackTrace();
+       }
+   }
+
+    public static List<AuthorBook> getAuthorBooks(int id) {
+        List<AuthorBook> books=new ArrayList<AuthorBook>();
+        ResultSet rs=null;
+        try {
+            String request="select * from book,author,writing_books where book.id=book_id and author.id=author_id";
+            con=getConnection();
+            PreparedStatement st=con.prepareStatement(request);
+            rs=st.executeQuery();
+            while(rs.next())
+            {
+//                Book b1=new Book();
+//                b1.setIsbnCode(rs.getInt("id"));
+//                b1.setTitle(rs.getString("title"));
+//                b1.setReleaseDate(rs.getObject("releasedate", LocalDate.class));
+//
+//                b1.setPrice(rs.getBigDecimal("price"));
+//                b1.setStock(rs.getInt("stock"));
+//                books.add(b1);
+            }
+            st.close();
+
+            closeConnection();
+        }catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    public static List<Borrowing> getAllBorrowings() {
+        ResultSet rs=null;
+        List<Borrowing> borrowings=new ArrayList<>();
+        try {
+            String request="select * from borrowing";
+            con=getConnection();
+            PreparedStatement st=con.prepareStatement(request);
+            rs=st.executeQuery();
+            while(rs.next())
+            {
+                Borrowing b1=new Borrowing();
+                b1.setId(rs.getInt("id"));
+                b1.setBorrowingDate(rs.getObject("borrowingdate", LocalDate.class));
+
+                b1.setDuration(rs.getInt("duration"));
+                b1.setStatus(rs.getString("status"));
+                borrowings.add(b1);
+            }
+            st.close();
+            closeConnection();
+        }catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return borrowings;
+    }
 }
