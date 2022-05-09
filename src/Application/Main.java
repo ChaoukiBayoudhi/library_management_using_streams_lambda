@@ -4,6 +4,7 @@ import DBConnection.DataBaseConnection;
 import org.postgresql.util.GettableHashMap;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,21 +40,25 @@ public class Main {
 //            DataBaseConnection.createTable("Member", columns, constraints);
 
             //create table Borrowing
-            HashMap<String, String>  columns = new HashMap<>();
-            columns.put("bookId","int");
-            columns.put("memberId","int");
-            columns.put("borrowingDate","date not null");
-            columns.put("duration","int");
-            columns.put("email","varchar(30)");
-            columns.put("state","boolean");
-
-            HashMap<String, String> constraints = new HashMap<>();
-            constraints.put("primary key","bookId,memberId");
-            constraints.put("bookId","Book(id)");
-            constraints.put("memberId","Member(id)");
-
-            DataBaseConnection.createTable("Borrowing", columns, constraints);
-            DataBaseConnection.closeConnection();
+//            HashMap<String, String>  columns = new HashMap<>();
+//            columns.put("bookId","int");
+//            columns.put("memberId","int");
+//            columns.put("borrowingDate","date not null");
+//            columns.put("duration","int");
+//            columns.put("email","varchar(30)");
+//            columns.put("state","boolean");
+//
+//            HashMap<String, String> constraints = new HashMap<>();
+//            constraints.put("primary key","bookId,memberId");
+//            constraints.put("bookId","Book(id)");
+//            constraints.put("memberId","Member(id)");
+//
+//            DataBaseConnection.createTable("Borrowing", columns, constraints);
+//            DataBaseConnection.closeConnection();
+            Scanner sc=new Scanner(System.in);
+            System.out.println("Enter a path for book's photo ");
+            String path = sc.next();
+            DataBaseConnection.insertImage(path,"book",1);
         }catch(Exception e){e.printStackTrace();}
     }
 }

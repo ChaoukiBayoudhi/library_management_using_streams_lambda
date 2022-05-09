@@ -2,9 +2,12 @@ package DBConnection;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class DataBaseConnection {
     private static final String url="jdbc:postgresql://localhost:5432/libdb";
@@ -66,8 +69,26 @@ public class DataBaseConnection {
        }
        catch (Exception e) {e.printStackTrace();}
    }
-   public static void retreiveImage(int id)
+   public static void retreiveImage(String tableName, int idOwner)
    {
+       try {
+           String request="select photo from  "+tableName+ " where id =?";
+           con=getConnection();
+           PreparedStatement st=con.prepareStatement(request);
+           st.setInt(1,idOwner);
+           ResultSet rs=st.executeQuery();
+           rs.next();
+           InputStream inpts=rs.getBinaryStream(1);
+           rs.close();
+           FileOutputStream fout=new FileOutputStream("images/img"+idOwner+".gif");
+           int k;
+           while((k=inpts.read()) != -1)
+               fout.write(k);
+           System.out.println("The photo is uploaded.");
+           st.close();
+           closeConnection();
+       }
+       catch (Exception e) {e.printStackTrace();}
 
    }
 }
