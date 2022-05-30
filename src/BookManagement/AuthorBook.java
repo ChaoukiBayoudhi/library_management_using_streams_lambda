@@ -9,6 +9,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class AuthorBook {
-    private Author author;
-    private Set<Book> books = new HashSet<>();
+    private Author author; //the author
+    private Set<Book> books = new HashSet<>();//Set of its books
 }

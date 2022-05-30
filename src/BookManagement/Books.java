@@ -16,18 +16,22 @@ public class Books {
 
     public List<Book> getBooksBetween(LocalDate start, LocalDate end)
     {
-           return  books.stream()
+           return  books.stream() //convert from List to Stream
                     .filter(b->b.getReleaseDate().isAfter(start)&&b.getReleaseDate().isBefore(end))
-                    .toList();
+                   //the filter result is a Stream contains only elements that match the right part of the lambda Expression
+                    .toList(); //convert from Stream to List
     }
+    //show titles of books of a given Author id.
     public void showAuthorBooks(int id)
     {
         List<AuthorBook> lstAuthorBooks=DataBaseConnection.getAuthorBooks(id);
-        lstAuthorBooks.stream().    //convert from list to Stream
-                filter(x->x.getAuthor().getId()==id) //get only the object AuthorBook of the given author
-                .map(x->x.getBooks().stream().map(Book::getTitle)) //get titles of all books of the given author
-                .forEach(System.out::println);
-//à revoir
+        lstAuthorBooks.stream()   //convert from list to Stream
+                //.filter(x->x.getAuthor().getId()==id) //get only the object AuthorBook of the given author
+                .map(x->x.getBooks().stream()//se of Books
+                        .map(Book::getTitle)) //replaces each Book by its title
+
+                .forEach(System.out::println);//show books' titles on the screen
+
 
     }
     public void borrowingCount()

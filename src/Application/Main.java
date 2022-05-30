@@ -3,12 +3,14 @@ package Application;
 import DBConnection.DataBaseConnection;
 import org.postgresql.util.GettableHashMap;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try {
+       // try {
             //crate Book table
 //            HashMap<String, String> columns = new HashMap<>();
 //            columns.put("id","serial");
@@ -55,10 +57,19 @@ public class Main {
 //
 //            DataBaseConnection.createTable("Borrowing", columns, constraints);
 //            DataBaseConnection.closeConnection();
-            Scanner sc=new Scanner(System.in);
-            System.out.println("Enter a path for book's photo ");
-            String path = sc.next();
-            DataBaseConnection.insertImage(path,"book",1);
-        }catch(Exception e){e.printStackTrace();}
+//            Scanner sc=new Scanner(System.in);
+//            System.out.println("Enter a path for book's photo ");
+//            String path = sc.next();
+//            DataBaseConnection.insertImage(path,"book",1);
+//        }catch(Exception e){e.printStackTrace();}
+//
+
+        List<Integer> lst= Arrays.asList(5,11,2,3,66);
+        //show cube values of lst
+        lst.stream()
+                .map(x->Math.pow(x,3)) //replace each value x of the stream by x^3
+                //.forEach(x-> System.out.println(x)); //or
+                .forEach(System.out::println); //method reference
+
     }
 }
